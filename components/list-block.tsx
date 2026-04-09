@@ -1,4 +1,4 @@
-import { UnorderedListBlock, OrderedListBlock } from '@/lib/api/articles'
+import type { UnorderedListBlock, OrderedListBlock } from "@/lib/types/articles";
 
 export default function ListBlockComponent({ items, type }: UnorderedListBlock | OrderedListBlock) {
   const Tag = type === 'unordered-list' ? 'ul' : 'ol';

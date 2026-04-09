@@ -14,7 +14,7 @@ export async function apiFetch<T, M = undefined>(
   const res = await fetch(`${apiURL}${path}`, {
     headers: {
       "Content-Type": "application/json",
-      "x-vercel-protection-bypass": token,
+      "x-vercel-protection-bypass": token as string,
       ...init?.headers,
     },
     ...init,

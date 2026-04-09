@@ -1,4 +1,4 @@
-import { HeadingBlock } from '@/lib/api/articles'
+import type { HeadingBlock } from "@/lib/types/articles";
 
 export default function HeadingBlockComponent({ text, level }: HeadingBlock) {
   return (

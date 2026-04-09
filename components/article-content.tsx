@@ -1,4 +1,4 @@
-import { ContentBlock } from '@/lib/api/articles'
+import type { ContentBlock } from "@/lib/types/articles";
 import BlockquoteComponent from '@/components/blockquote-block';
 import HeadingBlockComponent from '@/components/heading-block';
 import ImageBlockComponent from '@/components/image-block';

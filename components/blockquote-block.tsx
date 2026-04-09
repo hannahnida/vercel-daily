@@ -1,4 +1,4 @@
-import { BlockquoteBlock } from '@/lib/api/articles'
+import type { BlockquoteBlock } from "@/lib/types/articles";
 
 export default function BlockquoteComponent({ text }: BlockquoteBlock) {
   return (
