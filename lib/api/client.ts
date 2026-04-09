@@ -1,7 +1,11 @@
 import type { ApiResponse, ApiError } from "@/lib/types/api";
 
-const apiURL =  process.env.API_URL || '';
-const token = process.env.API_BYPASS_TOKEN || '';
+const apiURL = process.env.API_URL;
+const token = process.env.API_BYPASS_TOKEN;
+
+if (!apiURL || !token) {
+  throw new Error("API_URL and API_BYPASS_TOKEN must be set in environment variables");
+}
 
 export async function apiFetch<T, M = undefined>(
   path: string,
@@ -21,5 +25,5 @@ export async function apiFetch<T, M = undefined>(
     throw error;
   }
 
-  return await res.json() as Promise<ApiResponse<T, M>>;
+  return await res.json() as ApiResponse<T, M>;
 }

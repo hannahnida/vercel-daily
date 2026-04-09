@@ -1,3 +1,6 @@
+import { apiFetch } from "@/lib/api/client";
+import type { ApiError, PaginationMeta } from "@/lib/types/api";
+
 type Author = {
   avatar: string;
   name: string;
@@ -52,14 +55,16 @@ type Article = {
   title: string;
 }
 
-import { apiFetch } from "@/lib/api/client";
-import type { PaginationMeta } from "@/lib/types/api";
-
 export const articlesApi = {
   getAll: async () => {
-    const res = await apiFetch<Article[], PaginationMeta>("/articles");
-    console.log(res);
-    return res.data;
+    try {
+      const res = await apiFetch<Article[], PaginationMeta>("/articles");
+      return res.data;
+    } catch (e) {
+      const error = e as ApiError;
+      if (error.error.code === 'NOT_FOUND') return null;
+      throw error;
+    }
   },
   getFeatured: async () => {
     const res = await apiFetch<Article[], PaginationMeta>("/articles?featured=true");
