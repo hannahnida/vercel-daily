@@ -1,7 +1,7 @@
-import { Paragraph } from '@/lib/api/articles'
+import { ParagraphBlock } from '@/lib/api/articles'
 
-export default function ParagraphBlock(props: Paragraph) {
+export default function ParagraphBlockComponent({ text }: ParagraphBlock) {
   return (
-    <p>{props.text}</p>
+    <p>{text}</p>
   )
 }

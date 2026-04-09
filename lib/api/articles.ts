@@ -3,40 +3,40 @@ type Author = {
   name: string;
 }
 
-export type Paragraph = {
+export type ParagraphBlock = {
   type: 'paragraph';
   text: string;
 }
 
-type Heading = {
+export type HeadingBlock = {
   type: 'heading';
   level: 2 | 3;
   text: string;
 }
 
-type Blockquote = {
+export type BlockquoteBlock = {
   type: 'blockquote';
   text: string;
 }
 
-type UnorderedList = {
+export type UnorderedListBlock = {
   type: 'unordered-list';
   items: string[];
 }
 
-type OrderedList = {
+export type OrderedListBlock = {
   type: 'ordered-list';
   items: string[];
 }
 
-type Image = {
+export type ImageBlock = {
   type: 'image';
   src: string;
   alt: string;
   caption?: string;
 }
 
-type ContentBlock = Paragraph | Heading | Blockquote | UnorderedList | OrderedList | Image;
+export type ContentBlock = ParagraphBlock | HeadingBlock | BlockquoteBlock | UnorderedListBlock | OrderedListBlock | ImageBlock;
 
 type Article = {
   author: Author;
@@ -58,6 +58,7 @@ import type { PaginationMeta } from "@/lib/types/api";
 export const articlesApi = {
   getAll: async () => {
     const res = await apiFetch<Article[], PaginationMeta>("/articles");
+    console.log(res);
     return res.data;
   },
   getFeatured: async () => {
