@@ -6,7 +6,9 @@ export default function ListBlockComponent({ items, type }: UnorderedListBlock |
   return (
     <Tag>
       {items.map((item, i) => (
-        <li key={i}>{item}</li>
+        <li key={i}>
+          {item}
+        </li>
       ))}
     </Tag>
   )

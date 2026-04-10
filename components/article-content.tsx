@@ -26,7 +26,7 @@ function renderBlock(block: ContentBlock, i: number) {
 
 export default function ArticleContent({ content }: { content: ContentBlock[] }) {
   return (
-    <article>
+    <article className="prose">
       {content.map(renderBlock)}
     </article>
   )
