@@ -12,7 +12,6 @@ export default function InlineMarkdown({ text }: { text: string }) {
     if (match.index > lastIndex) {
       nodes.push(text.slice(lastIndex, match.index));
     }
-    console.log(match);
 
     const [, linkText, linkHref, code, bold] = match;
 

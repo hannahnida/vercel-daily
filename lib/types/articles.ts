@@ -1,7 +1,4 @@
-import {apiFetch} from "@/lib/api/client";
-import type {ApiError, PaginationMeta} from "@/lib/types/api";
-
-type Author = {
+export type Author = {
   avatar: string;
   name: string;
 }
