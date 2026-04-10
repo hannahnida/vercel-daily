@@ -1,7 +1,8 @@
 import type { ParagraphBlock } from "@/lib/types/articles";
+import InlineMarkdown from "@/components/inline-markdown";
 
 export default function ParagraphBlockComponent({ text }: ParagraphBlock) {
   return (
-    <p>{text}</p>
+    <p><InlineMarkdown text={text} /></p>
   )
 }
