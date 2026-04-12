@@ -6,6 +6,7 @@ export type BreakingNews = {
   category: string;
   publishedAt: string;
   urgent: boolean;
+  slug: string;
 };
 
 export type BreakingNewsResponse = {

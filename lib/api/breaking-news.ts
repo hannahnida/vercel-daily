@@ -1,12 +1,20 @@
 import { apiFetch } from "@/lib/api/client";
 import type { BreakingNews } from "@/lib/types/breaking-news";
+import type { Article } from "@/lib/types/articles";
 import { cacheLife, cacheTag } from 'next/cache';
+import { handleApiError } from '@/lib/api/articles';
 
-export async function getBreakingNews(): Promise<BreakingNews> {
+export async function getBreakingNewsWithSlug() {
   "use cache";
-  cacheLife("seconds");
+  cacheLife("minutes");
   cacheTag("breaking-news");
-  const response = await apiFetch<BreakingNews>("/breaking-news");
-  return response.data;
+
+  try {
+    const breaking = await apiFetch<BreakingNews>("/breaking-news");
+    const article = await apiFetch<Article>(`/articles/${breaking.data.articleId}`);
+    return { ...breaking.data, slug: article.data.slug };
+  } catch (e) {
+    handleApiError(e);
+  }
 }
 
