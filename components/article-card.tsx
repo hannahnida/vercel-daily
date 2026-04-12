@@ -25,6 +25,7 @@ export default function ArticleCard({ article }: ArticleCardProps) {
             src={article.image}
             alt={article.title}
             fill
+            sizes={"(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"}
             className="object-cover transition-opacity duration-300 group-hover:opacity-90"
           />
         ) : (

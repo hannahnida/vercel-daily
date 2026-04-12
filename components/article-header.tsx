@@ -11,12 +11,13 @@ export default function ArticleHeader({title, image, author, category, tags, pub
   return (
     <div className="mb-8">
       {image && (
-        <div className="relative w-full h-100 mb-6 rounded-xl overflow-hidden">
+        <div className="relative w-full h-100 mb-6 overflow-hidden">
           <Image
             src={image}
             alt={title}
             fill
-            className="object-cover object-center not-prose"
+            sizes="(max-width: 768px) 100vw, 768px"
+            className="object-contain object-center not-prose"
             priority
           />
         </div>
@@ -31,13 +32,17 @@ export default function ArticleHeader({title, image, author, category, tags, pub
       {/* Author row */}
       <div className="flex items-center gap-3 mb-5">
         {author.avatar && (
-          <Image
-            src={author.avatar}
-            alt={author.name}
-            width={44}
-            height={44}
-            className="rounded-full object-cover not-prose"
-          />
+          <div className="avatar">
+            <div className="w-24 rounded-full">
+              <Image
+                src={author.avatar}
+                alt={author.name}
+                width={44}
+                height={44}
+                className="rounded-full object-cover not-prose"
+              />
+            </div>
+          </div>
         )}
         <div>
           <p className="font-semibold text-sm leading-tight">{author.name}</p>

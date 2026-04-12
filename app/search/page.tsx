@@ -33,7 +33,7 @@ export default async function SearchPage({ searchParams }: Props) {
   const query = typeof q === 'string' ? q.trim() : '';
 
   return (
-    <div className="w-full max-w-6xl mx-auto px-6 sm:px-12 py-12">
+    <div className="w-full max-w-screen-xl mx-auto px-6 sm:px-12 py-12">
       <h1 className="text-3xl font-bold mb-8">Search</h1>
 
       {/* Search input — client component, wrapped in Suspense (useSearchParams requirement) */}

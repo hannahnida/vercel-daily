@@ -16,7 +16,7 @@ export default async function ArticlePage({ params }: Props) {
   if (!article) notFound();
 
   return (
-    <div className="w-full max-w-6xl mx-auto px-6 sm:px-12 py-10">
+    <div className="w-full max-w-screen-xl mx-auto">
       {/* Prose body — constrained to readable width */}
       <article className="max-w-3xl mx-auto prose">
         <ArticleHeader {...article} />
@@ -24,7 +24,7 @@ export default async function ArticlePage({ params }: Props) {
       </article>
 
       {/* Trending grid — full container width */}
-      <Suspense fallback={<ArticleGridSkeleton title="Trending Articles" columns={4} />}>
+      <Suspense fallback={<ArticleGridSkeleton count={4} title="Trending Articles" columns={4} />}>
         <TrendingArticles excludedIds={[article.id]} />
       </Suspense>
     </div>

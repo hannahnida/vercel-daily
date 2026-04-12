@@ -12,5 +12,5 @@ export async function FeaturedArticles({
     return <p className="text-base-content/60">No featured articles found.</p>;
   }
 
-  return <ArticleGrid articles={articles.slice(0, 6)} title="Featured Articles" columns={3} />;
+  return <ArticleGrid className="w-full max-w-screen-xl" articles={articles.slice(0, 6)} title="Featured Articles" columns={3} />;
 }
