@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import type { Category } from '@/lib/types/categories'
 
 type Props = {
@@ -12,7 +12,6 @@ type Props = {
 
 export default function SearchForm({ categories, initialQ = '', initialCategory }: Props) {
   const router = useRouter()
-  const searchParams = useSearchParams()
   const [q, setQ] = useState(initialQ)
   const [category, setCategory] = useState<string | undefined>(initialCategory)
 
@@ -27,8 +26,7 @@ export default function SearchForm({ categories, initialQ = '', initialCategory 
     if (q.length > 0 && q.length < 3) return
     const t = setTimeout(() => updateUrl(q, category), 300)
     return () => clearTimeout(t)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [q])
+  }, [q, category])
 
   function onSubmit(e: React.FormEvent) {
     e.preventDefault()
