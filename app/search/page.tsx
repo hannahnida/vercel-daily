@@ -1,59 +1,54 @@
 import { Suspense } from 'react';
-import { articlesApi } from '@/lib/api/articles';
+import { getCategories } from '@/lib/api/categories';
+import { articlesApi } from "@/lib/api/articles";
 import ArticleGrid from '@/components/article-grid';
 import ArticleGridSkeleton from '@/components/article-grid-skeleton';
-import SearchInput from '@/components/search-input';
+import Pager from '@/components/pager';
+import SearchForm from '@/components/search-form';
+import { FormSkeleton } from '@/components/search-skeletons';
 
-type Props = {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-};
+type SearchParams = Promise<{ q?: string; category?: string; page?: string }>
 
-async function SearchResults({ query }: { query: string }) {
-  const articles = await articlesApi.search(query);
-
-  if (!articles || articles.length === 0) {
-    return (
-      <p className="text-base-content/60 text-sm mt-8">
-        No articles found for &ldquo;{query}&rdquo;.
-      </p>
-    );
-  }
+export default async function SearchPage({ searchParams }: { searchParams: SearchParams }) {
+  const { q, category, page } = await searchParams;
+  const pageNum = Number(page) || 1;
 
   return (
-    <ArticleGrid
-      articles={articles}
-      title={`Results for "${query}"`}
-      columns={4}
-    />
-  );
-}
+    <main className="mx-auto max-w-5xl min-w-5xl px-4 py-10">
+      <h1 className="mb-6 text-3xl font-bold">Search</h1>
 
-export default async function SearchPage({ searchParams }: Props) {
-  const { q } = await searchParams;
-  const query = typeof q === 'string' ? q.trim() : '';
-
-  return (
-    <div className="w-full max-w-screen-xl mx-auto px-6 sm:px-12 py-12">
-      <h1 className="text-3xl font-bold mb-8">Search</h1>
-
-      {/* Search input — client component, wrapped in Suspense (useSearchParams requirement) */}
-      <Suspense fallback={<div className="input input-bordered w-full max-w-xl animate-pulse" />}>
-        <SearchInput />
+      <Suspense fallback={<FormSkeleton />}>
+        <SearchFormLoader initialQ={q} initialCategory={category} />
       </Suspense>
 
-      {/* Results */}
-      {query ? (
-        <Suspense
-          key={query}
-          fallback={<ArticleGridSkeleton title={`Results for "${query}"`} columns={4} count={8} />}
-        >
-          <SearchResults query={query} />
-        </Suspense>
-      ) : (
-        <p className="text-base-content/50 text-sm mt-8">
-          Type something above to search articles.
-        </p>
-      )}
-    </div>
-  );
+      <Suspense key={`${q ?? ''}-${category ?? ''}-${pageNum}`} fallback={<ArticleGridSkeleton count={5} columns={3} />}>
+        <Results q={q} category={category} page={pageNum} />
+      </Suspense>
+    </main>
+  )
 }
+
+async function SearchFormLoader({ initialQ, initialCategory }: { initialQ?: string; initialCategory?: string }) {
+  const categories = await getCategories()
+  return <SearchForm categories={categories} initialQ={initialQ} initialCategory={initialCategory} />
+}
+
+async function Results({ q, category, page }: { q?: string; category?: string; page: number }) {
+  const { data: articles, meta } = await articlesApi.search({ q, category, page })
+
+  if (articles.length === 0) {
+    return <p role="status" className="py-12 text-center">No articles match your search.</p>
+  }
+
+  const showingRecent = !q || q.length < 3
+
+  return (
+    <section className="mt-8">
+      <h2 className="mb-4 text-sm font-medium text-muted-foreground">
+        {showingRecent ? 'Recent articles' : `Results for "${q}"`}
+      </h2>
+      <ArticleGrid articles={articles} columns={3} />
+      <Pager pagination={meta.pagination} q={q} category={category} />
+    </section>
+  )
+};

@@ -4,7 +4,7 @@ export default function SearchLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="flex-1 flex flex-col items-center justify-center">
+    <div className="flex-1 flex flex-col p-4 items-center">
       {children}
     </div>
   );

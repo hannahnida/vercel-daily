@@ -1,8 +1,8 @@
-import { apiFetch } from "@/lib/api/client";
 import type { ApiError, PaginationMeta } from "@/lib/types/api";
-import { isApiError } from "@/lib/types/api";
 import type { Article } from "@/lib/types/articles";
+import { apiFetch } from "@/lib/api/client";
 import { cacheLife, cacheTag } from 'next/cache';
+import { isApiError } from "@/lib/types/api";
 
 export function handleApiError(e: unknown): null {
   if (isApiError(e) && e.error.code === 'NOT_FOUND') {
@@ -14,8 +14,14 @@ export function handleApiError(e: unknown): null {
   throw e;
 }
 
-// Standalone functions — the compiler can reliably find and instrument
-// the "use cache" directive at this level
+async function getAllArticlesForStaticParams() {
+  try {
+    const res = await apiFetch<Article[]>("/articles");
+    return res.data;
+  } catch (e) {
+    handleApiError(e);
+  }
+}
 
 async function getAllArticles() {
   "use cache";
@@ -30,11 +36,8 @@ async function getAllArticles() {
 }
 
 async function getFeaturedArticles() {
-  "use cache";
-  cacheTag("featured-articles");
-  cacheLife("hours");
   try {
-    const res = await apiFetch<Article[], PaginationMeta>("/articles?featured=true");
+    const res = await apiFetch<Article[], PaginationMeta>("/articles?featured=true&limit=6");
     return res.data;
   } catch (e) {
     return handleApiError(e);
@@ -54,10 +57,7 @@ async function getArticleBySlug(slug: string) {
 }
 
 async function getTrendingArticles(ids: string[]) {
-  "use cache";
   const articleIds = ids.join(",");
-  cacheTag(`trending-excluding-${articleIds}`);
-  cacheLife("hours");
   try {
     const res = await apiFetch<Article[]>(`/articles/trending?exclude=${articleIds}`);
     return res.data;
@@ -66,10 +66,15 @@ async function getTrendingArticles(ids: string[]) {
   }
 }
 
-async function searchArticles(input: string) {
+
+async function searchArticles({q, page, category}: { q?: string; page?: number; category?: string }) {
+  const params = new URLSearchParams()
+  if (q) params.set('search', q)
+  if (category) params.set('category', category)
+  params.set('limit', '5')
+  params.set('page', String(page || 1))
   try {
-    const res = await apiFetch<Article[], PaginationMeta>(`/articles?search=${input}`);
-    return res.data;
+    return await apiFetch<Article[], PaginationMeta>(`/articles?${params}`);
   } catch (e) {
     return handleApiError(e);
   }
@@ -78,6 +83,7 @@ async function searchArticles(input: string) {
 // The object API surface stays the same — callers don't need to change anything
 export const articlesApi = {
   getAll: getAllArticles,
+  getAllArticlesForStaticParams,
   getFeatured: getFeaturedArticles,
   getArticleBySlug,
   getTrendingArticles,

@@ -8,8 +8,3 @@ export type BreakingNews = {
   urgent: boolean;
   slug: string;
 };
-
-export type BreakingNewsResponse = {
-  success: boolean;
-  data: BreakingNews;
-};

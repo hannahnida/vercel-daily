@@ -6,6 +6,16 @@ import ArticleContent from '@/components/article-content';
 import TrendingArticles from '@/components/trending-articles';
 import ArticleGridSkeleton from '@/components/article-grid-skeleton';
 
+
+export async function generateStaticParams() {
+  const articles = await articlesApi.getAllArticlesForStaticParams();
+  if (!articles) return [];
+  return articles.map((article) => ({
+    slug: article.slug,
+  }));
+}
+
+
 type Props = {
   params: Promise<{ slug: string }>
 }
@@ -14,6 +24,7 @@ export default async function ArticlePage({ params }: Props) {
   const { slug } = await params;
   const article = await articlesApi.getArticleBySlug(slug);
   if (!article) notFound();
+
 
   return (
     <div className="w-full max-w-screen-xl mx-auto">

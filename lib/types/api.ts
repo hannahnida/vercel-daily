@@ -1,12 +1,14 @@
+export type Pagination = {
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+  limit: number;
+  page: number;
+  total: number;
+  totalPages: number;
+}
+
 export type PaginationMeta = {
-  pagination: {
-    hasNextPage: boolean;
-    hasPreviousPage: boolean;
-    limit: number;
-    page: number;
-    total: number;
-    totalPages: number;
-  };
+  pagination: Pagination;
 };
 
 export type ApiResponse<T, M = undefined> = {
