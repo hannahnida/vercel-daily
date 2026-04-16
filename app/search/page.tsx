@@ -2,11 +2,10 @@ import { Suspense } from 'react';
 import { getCategories } from '@/lib/api/categories';
 import { articlesApi } from "@/lib/api/articles";
 import ArticleGrid from '@/components/article-grid';
-import ArticleGridSkeleton from '@/components/article-grid-skeleton';
 import Pager from '@/components/pager';
 import SearchInput from '@/components/search-input';
 import CategoryBadges from '@/components/category-badges';
-import { FormSkeleton, CategoryBadgesSkeleton } from '@/components/search-skeletons';
+import { FormSkeleton, CategoryBadgesSkeleton, SearchResultsSkeleton } from '@/components/search-skeletons';
 
 type SearchParams = Promise<{ q?: string; category?: string; page?: string }>
 
@@ -19,7 +18,7 @@ export default function SearchPage({ searchParams }: { searchParams: SearchParam
         <SearchFormLoader searchParams={searchParams} />
       </Suspense>
 
-      <Suspense fallback={<ArticleGridSkeleton count={5} columns={3} />}>
+      <Suspense fallback={<SearchResultsSkeleton />}>
         <Results searchParams={searchParams} />
       </Suspense>
     </main>
