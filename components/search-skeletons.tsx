@@ -1,7 +1,17 @@
 import ArticleGridSkeleton from '@/components/article-grid-skeleton';
 
-export function FormSkeleton() {
-  return <div className="h-10 animate-pulse rounded-md bg-secondary" />;
+export function SearchInputSkeleton() {
+  return (
+    <div className="flex flex-col gap-3 sm:flex-row">
+      <input
+        type="search"
+        disabled
+        placeholder="Search articles…"
+        className="input input-bordered flex-1 lg:flex-5"
+      />
+      <button disabled className="btn btn-primary flex-1">Search</button>
+    </div>
+  );
 }
 
 export function CategoryBadgesSkeleton({ hasSelected = false }: { hasSelected?: boolean }) {

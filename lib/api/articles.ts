@@ -70,8 +70,9 @@ async function getRecent({ page }: { page: number }) {
   'use cache';
   cacheLife('articles');
   cacheTag('articles', 'articles:recent');
-  const params = new URLSearchParams()
+  const params = new URLSearchParams();
   params.set('page', String(page || 1));
+  params.set('limit', '5');
   try {
     return await apiFetch<Article[], PaginationMeta>(`/articles?${params}`);
   } catch (e) {

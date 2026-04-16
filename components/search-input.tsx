@@ -1,23 +1,20 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 
-type Props = {
-  initialQuery?: string
-}
+export default function SearchInput() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [q, setQuery] = useState(searchParams.get('q') ?? '');
 
-export default function SearchInput({initialQuery = ''}: Props) {
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const [q, setQuery] = useState(initialQuery)
-
+  // Sync local state when URL changes externally (back/forward, category click)
   useEffect(() => {
-    setQuery(searchParams.get('q') || '')
-  }, [searchParams])
+    setQuery(searchParams.get('q') ?? '');
+  }, [searchParams]);
 
   function updateUrl(nextQuery: string) {
-    const trimmed = nextQuery.trim()
+    const trimmed = nextQuery.trim();
     const params = new URLSearchParams(searchParams);
     if (trimmed) {
       params.set('q', trimmed);
@@ -29,21 +26,19 @@ export default function SearchInput({initialQuery = ''}: Props) {
   }
 
   useEffect(() => {
-    const currentQuery = searchParams.get('q') || ''
-    const trimmedInput = q.trim()
+    const currentQuery = searchParams.get('q') ?? '';
+    const trimmedInput = q.trim();
 
-    if (currentQuery === trimmedInput) return
+    if (currentQuery === trimmedInput) return;
+    if (trimmedInput.length > 0 && trimmedInput.length < 3) return;
 
-    // Don't navigate for short queries (1-2 chars)
-    if (trimmedInput.length > 0 && trimmedInput.length < 3) return
-
-    const t = setTimeout(() => updateUrl(q), 500)
-    return () => clearTimeout(t)
-  }, [q])
+    const t = setTimeout(() => updateUrl(q), 500);
+    return () => clearTimeout(t);
+  }, [q]);
 
   function onSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    updateUrl(q)
+    e.preventDefault();
+    updateUrl(q);
   }
 
   return (
@@ -59,5 +54,5 @@ export default function SearchInput({initialQuery = ''}: Props) {
       />
       <button type="submit" className="btn btn-primary flex-1">Search</button>
     </form>
-  )
-};
+  );
+}

@@ -6,7 +6,7 @@ import Pager from '@/components/pager';
 import SearchInput from '@/components/search-input';
 import CategoryBadges from '@/components/category-badges';
 import {
-  FormSkeleton,
+  SearchInputSkeleton,
   CategoryBadgesSkeleton,
   SearchResultsSkeleton,
 } from '@/components/search-skeletons';
@@ -18,9 +18,15 @@ export default function SearchPage({ searchParams }: { searchParams: SearchParam
     <main className="mx-auto max-w-5xl xl:min-w-5xl px-4 py-10">
       <h1 className="mb-6 text-3xl font-bold">Search</h1>
 
-      <Suspense fallback={<FormSkeleton />}>
-        <SearchFormLoader searchParams={searchParams} />
-      </Suspense>
+      <div className="space-y-4">
+        <Suspense fallback={<SearchInputSkeleton />}>
+          <SearchInput />
+        </Suspense>
+
+        <Suspense fallback={<CategoryBadgesSkeleton />}>
+          <CategoryLoader searchParams={searchParams} />
+        </Suspense>
+      </div>
 
       <Suspense fallback={<SearchResultsSkeleton />}>
         <KeyedResults searchParams={searchParams} />
@@ -29,23 +35,10 @@ export default function SearchPage({ searchParams }: { searchParams: SearchParam
   );
 }
 
-async function SearchFormLoader({ searchParams }: { searchParams: SearchParams }) {
-  const { q, category } = await searchParams;
-
-  return (
-    <div className="space-y-4">
-      <SearchInput initialQuery={q} />
-
-      <Suspense fallback={<CategoryBadgesSkeleton hasSelected={!!category} />}>
-        <CategoryLoader initialCategory={category} />
-      </Suspense>
-    </div>
-  );
-}
-
-async function CategoryLoader({ initialCategory }: { initialCategory?: string }) {
+async function CategoryLoader({ searchParams }: { searchParams: SearchParams }) {
+  const { category } = await searchParams;
   const categories = await getCategories();
-  const selected = categories.find((c) => c.slug === initialCategory);
+  const selected = categories.find((c) => c.slug === category);
   return <CategoryBadges categories={categories} initialCategory={selected} />;
 }
 
