@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useTransition } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 type Props = {
@@ -11,7 +11,6 @@ export default function SearchInput({initialQuery = ''}: Props) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [q, setQuery] = useState(initialQuery)
-  const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     setQuery(searchParams.get('q') || '')
@@ -38,13 +37,13 @@ export default function SearchInput({initialQuery = ''}: Props) {
     // Don't navigate for short queries (1-2 chars)
     if (trimmedInput.length > 0 && trimmedInput.length < 3) return
 
-    const t = setTimeout(() => startTransition(() => updateUrl(q)), 500)
+    const t = setTimeout(() => updateUrl(q), 500)
     return () => clearTimeout(t)
   }, [q])
 
   function onSubmit(e: React.FormEvent) {
     e.preventDefault()
-    startTransition(() => updateUrl(q))
+    updateUrl(q)
   }
 
   return (
@@ -58,9 +57,7 @@ export default function SearchInput({initialQuery = ''}: Props) {
         placeholder="Search articles…"
         className="input input-bordered flex-1"
       />
-      <button type="submit" className="btn btn-primary" disabled={isPending}>
-        {isPending ? <span className="loading loading-spinner loading-sm" /> : 'Search'}
-      </button>
+      <button type="submit" className="btn btn-primary">Search</button>
     </form>
   )
 };

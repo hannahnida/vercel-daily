@@ -19,7 +19,7 @@ export default function SearchPage({ searchParams }: { searchParams: SearchParam
       </Suspense>
 
       <Suspense fallback={<SearchResultsSkeleton />}>
-        <Results searchParams={searchParams} />
+        <KeyedResults searchParams={searchParams} />
       </Suspense>
     </main>
   );
@@ -30,7 +30,7 @@ async function SearchFormLoader({ searchParams }: { searchParams: SearchParams }
 
   return (
     <div className="space-y-4">
-      <SearchInput initialQ={q} />
+      <SearchInput initialQuery={q} />
 
       <Suspense fallback={<CategoryBadgesSkeleton hasSelected={!!category} />}>
         <CategoryLoader initialCategory={category} />
@@ -43,6 +43,17 @@ async function CategoryLoader({ initialCategory }: { initialCategory?: string })
   const categories = await getCategories();
   const selected = categories.find(c => c.slug === initialCategory);
   return <CategoryBadges categories={categories} initialCategory={selected} />;
+}
+
+async function KeyedResults({ searchParams }: { searchParams: SearchParams }) {
+  const { q = '', category = '', page = '' } = await searchParams;
+  const resultsKey = `${q}-${category}-${page}`;
+
+  return (
+    <Suspense key={resultsKey} fallback={<SearchResultsSkeleton />}>
+      <Results searchParams={searchParams} />
+    </Suspense>
+  );
 }
 
 async function Results({ searchParams }: { searchParams: SearchParams }) {
