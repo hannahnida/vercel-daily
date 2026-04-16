@@ -36,6 +36,9 @@ async function getAllArticles() {
 }
 
 async function getFeaturedArticles() {
+  "use cache";
+  cacheLife("articles");
+  cacheTag('articles', 'articles:featured');
   try {
     const res = await apiFetch<Article[], PaginationMeta>("/articles?featured=true&limit=6");
     return res.data;
