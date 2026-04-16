@@ -1,12 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useTransition } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function SearchInput() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [q, setQuery] = useState(searchParams.get('q') ?? '');
+  const [isPending, startTransition] = useTransition();
 
   // Sync local state when URL changes externally (back/forward, category click)
   useEffect(() => {
@@ -32,13 +33,13 @@ export default function SearchInput() {
     if (currentQuery === trimmedInput) return;
     if (trimmedInput.length > 0 && trimmedInput.length < 3) return;
 
-    const t = setTimeout(() => updateUrl(q), 500);
+    const t = setTimeout(() => startTransition(() => updateUrl(q)), 500)
     return () => clearTimeout(t);
   }, [q]);
 
   function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    updateUrl(q);
+    startTransition(() => updateUrl(q));
   }
 
   return (
@@ -52,7 +53,9 @@ export default function SearchInput() {
         placeholder="Search articles…"
         className="input input-bordered flex-1 lg:flex-5"
       />
-      <button type="submit" className="btn btn-primary flex-1">Search</button>
+      <button type="submit" className="btn btn-primary flex-1" disabled={isPending}>
+        {isPending ? <span className="loading loading-spinner loading-sm" /> : 'Search'}
+      </button>
     </form>
   );
 }
