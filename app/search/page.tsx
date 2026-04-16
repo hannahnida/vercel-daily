@@ -4,8 +4,9 @@ import { articlesApi } from "@/lib/api/articles";
 import ArticleGrid from '@/components/article-grid';
 import ArticleGridSkeleton from '@/components/article-grid-skeleton';
 import Pager from '@/components/pager';
-import SearchForm from '@/components/search-form';
-import { FormSkeleton } from '@/components/search-skeletons';
+import SearchInput from '@/components/search-input';
+import CategoryBadges from '@/components/category-badges';
+import { FormSkeleton, CategoryBadgesSkeleton } from '@/components/search-skeletons';
 
 type SearchParams = Promise<{ q?: string; category?: string; page?: string }>
 
@@ -27,8 +28,22 @@ export default function SearchPage({ searchParams }: { searchParams: SearchParam
 
 async function SearchFormLoader({ searchParams }: { searchParams: SearchParams }) {
   const { q, category } = await searchParams;
+
+  return (
+    <div className="space-y-4">
+      <SearchInput initialQ={q} />
+
+      <Suspense fallback={<CategoryBadgesSkeleton hasSelected={!!category} />}>
+        <CategoryLoader initialCategory={category} />
+      </Suspense>
+    </div>
+  );
+}
+
+async function CategoryLoader({ initialCategory }: { initialCategory?: string }) {
   const categories = await getCategories();
-  return <SearchForm categories={categories} initialQ={q} initialCategory={category} />;
+  const selected = categories.find(c => c.slug === initialCategory);
+  return <CategoryBadges categories={categories} initialCategory={selected} />;
 }
 
 async function Results({ searchParams }: { searchParams: SearchParams }) {
