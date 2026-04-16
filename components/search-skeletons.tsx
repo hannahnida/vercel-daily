@@ -24,7 +24,7 @@ export function SearchResultsSkeleton() {
         Loading results...
       </h2>
       <ArticleGridSkeleton count={5} columns={3} />
-      <div className="mt-8 h-8 animate-pulse" />;
+      <div className="mt-8 h-8 animate-pulse" />
     </section>
   );
 }

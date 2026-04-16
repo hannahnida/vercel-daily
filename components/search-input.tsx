@@ -55,9 +55,9 @@ export default function SearchInput({initialQuery = ''}: Props) {
         value={q}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Search articles…"
-        className="input input-bordered flex-1"
+        className="input input-bordered flex-1 lg:flex-5"
       />
-      <button type="submit" className="btn btn-primary">Search</button>
+      <button type="submit" className="btn btn-primary flex-1">Search</button>
     </form>
   )
 };

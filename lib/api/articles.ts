@@ -66,8 +66,23 @@ async function getTrendingArticles(ids: string[]) {
   }
 }
 
+async function getRecent({ page }: { page: number }) {
+  'use cache';
+  cacheLife('articles');
+  cacheTag('articles', 'articles:recent');
+  const params = new URLSearchParams()
+  params.set('page', String(page || 1));
+  try {
+    return await apiFetch<Article[], PaginationMeta>(`/articles?${params}`);
+  } catch (e) {
+    return handleApiError(e);
+  }
+}
 
 async function searchArticles({q, page, category}: { q?: string; page?: number; category?: string }) {
+  'use cache';
+  cacheLife('articles');
+  cacheTag('articles', `articles:search:${q}:${category}`);
   const params = new URLSearchParams()
   if (q) params.set('search', q)
   if (category) params.set('category', category)
@@ -87,5 +102,6 @@ export const articlesApi = {
   getFeatured: getFeaturedArticles,
   getArticleBySlug,
   getTrendingArticles,
+  getRecent,
   search: searchArticles,
 };
