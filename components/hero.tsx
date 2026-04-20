@@ -1,6 +1,22 @@
-import Image from 'next/image';
+import { Suspense } from 'react';
 import Link from 'next/link';
 import { ArrowRightIcon } from 'lucide-react';
+import { getSubscriptionStatus } from '@/lib/api/subscription';
+import SubscribeButton from '@/components/subscribe-button';
+
+async function HeroButtons() {
+  const subscriptionStatus = await getSubscriptionStatus();
+
+  return (
+    <div className="text-base-content/70 text-lg leading-relaxed flex gap-2">
+      <Link href="/search" className="btn btn-primary">
+        Browse Articles
+        <ArrowRightIcon className="h-4 w-4" />
+      </Link>
+      <SubscribeButton status={subscriptionStatus} />
+    </div>
+  );
+}
 
 export default function Hero() {
   return (
@@ -20,13 +36,17 @@ export default function Hero() {
             {'Stay up to date with the latest news, insights, and releases from the Vercel ecosystem and beyond.'}
           </p>
 
-          <div className="text-base-content/70 text-lg leading-relaxed flex gap-2">
-            <button className="btn btn-lg">
-              Browse Articles
-              <ArrowRightIcon className="h-4 w-4" />
-            </button>
-            <button className="btn btn-outline btn-lg">Subscribe</button>
-          </div>
+          <Suspense fallback={
+            <div className="flex gap-2">
+              <div className="btn btn-primary animate-pulse">
+                Browse Articles
+                <ArrowRightIcon className="h-4 w-4" />
+              </div>
+              <div className="btn animate-pulse w-32 min-w-[120px]" />
+            </div>
+          }>
+            <HeroButtons />
+          </Suspense>
         </div>
       </div>
     </section>

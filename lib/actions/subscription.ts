@@ -1,0 +1,66 @@
+'use server';
+
+import { revalidatePath } from 'next/cache';
+import { cookies } from 'next/headers';
+
+import { apiFetch } from '@/lib/api/client';
+import handleApiError from '@/lib/api/handle-error';
+import type { SubscribeStatus } from '@/lib/types/subscribe-status';
+
+
+const SUBSCRIPTION_TOKEN_COOKIE = 'subscription_token';
+
+export async function createNewSubscription() {
+  try {
+    const res = await apiFetch<SubscribeStatus>("/subscription/create", {
+      method: "POST",
+    });
+
+    (await cookies()).set('subscription_token', res.data?.token, {
+      httpOnly: true,
+      sameSite: 'lax',
+      path: '/',
+      secure: process.env.NODE_ENV === 'production'
+    });
+    revalidatePath('/', 'layout');
+    return res.data;
+  } catch (e) {
+    handleApiError(e);
+  }
+}
+
+export async function activateSubscription() {
+  const token = (await cookies()).get(SUBSCRIPTION_TOKEN_COOKIE)?.value;
+  if (!token) return null;
+
+  try {
+    const res = await apiFetch<SubscribeStatus>("/subscription", {
+      method: "POST",
+      headers: {
+        'x-subscription-token': token
+      }
+    });
+    revalidatePath('/', 'layout');
+    return res.data;
+  } catch (e) {
+    handleApiError(e);
+  }
+}
+
+export async function deactivateSubscription() {
+  const token = (await cookies()).get(SUBSCRIPTION_TOKEN_COOKIE)?.value;
+  if (!token) return null;
+
+  try {
+    const res = await apiFetch<SubscribeStatus>("/subscription", {
+      method: "DELETE",
+      headers: {
+        'x-subscription-token': token
+      }
+    });
+    revalidatePath('/', 'layout');
+    return res.data;
+  } catch (e) {
+    handleApiError(e);
+  }
+}

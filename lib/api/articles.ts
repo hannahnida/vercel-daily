@@ -1,18 +1,8 @@
-import type { ApiError, PaginationMeta } from "@/lib/types/api";
-import type { Article } from "@/lib/types/articles";
-import { apiFetch } from "@/lib/api/client";
+import type { PaginationMeta } from '@/lib/types/api';
+import type { Article } from '@/lib/types/articles';
+import { apiFetch } from '@/lib/api/client';
 import { cacheLife, cacheTag } from 'next/cache';
-import { isApiError } from "@/lib/types/api";
-
-export function handleApiError(e: unknown): null {
-  if (isApiError(e) && e.error.code === 'NOT_FOUND') {
-    // The resource simply doesn't exist — caller can handle this gracefully
-    return null;
-  }
-  // Everything else — unexpected API errors, network failures, etc.
-  // Let it propagate to Next.js error boundaries
-  throw e;
-}
+import handleApiError from '@/lib/api/handle-error';
 
 async function getAllArticlesForStaticParams() {
   try {

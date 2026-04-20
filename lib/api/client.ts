@@ -11,18 +11,31 @@ export async function apiFetch<T, M = undefined>(
   path: string,
   init?: RequestInit
 ): Promise<ApiResponse<T, M>> {
+  const { headers: initHeaders, ...initRest } = init ?? {};
   const res = await fetch(`${apiURL}${path}`, {
+    ...initRest,
     headers: {
-      "Content-Type": "application/json",
-      "x-vercel-protection-bypass": token as string,
-      ...init?.headers,
+      'Content-Type': 'application/json',
+      'x-vercel-protection-bypass': token as string,
+      ...initHeaders,
     },
-    ...init,
   });
 
   if (!res.ok) {
-    const error: ApiError = await res.json();
-    throw error;
+    const contentType = res.headers.get('content-type') ?? '';
+    if (contentType.includes('application/json')) {
+      const error: ApiError = await res.json();
+      throw error;
+    }
+    // Non-JSON error (e.g. plain-text 401 Unauthorized)
+    const message = await res.text();
+    throw {
+      success: false,
+      error: {
+        code: 'BAD_REQUEST',
+        message: message || res.statusText,
+      },
+    } satisfies ApiError;
   }
 
   return await res.json() as ApiResponse<T, M>;

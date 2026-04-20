@@ -20,6 +20,7 @@ export type ApiResponse<T, M = undefined> = {
 export type ErrorCode =
   | 'VALIDATION_ERROR'
   | 'BAD_REQUEST'
+  | 'UNAUTHORIZED'
   | 'NOT_FOUND'
   | 'INTERNAL_SERVER_ERROR';
 
