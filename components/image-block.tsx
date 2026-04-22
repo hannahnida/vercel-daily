@@ -1,5 +1,5 @@
-import Image from 'next/image'
-import type { ImageBlock } from "@/lib/types/articles";
+import Image from 'next/image';
+import type { ImageBlock } from '@/lib/types/articles';
 
 export default function ImageBlockComponent({ src, alt, caption }: ImageBlock) {
   if(!src) {
@@ -22,5 +22,5 @@ export default function ImageBlockComponent({ src, alt, caption }: ImageBlock) {
         </figcaption>
       )}
     </figure>
-  )
+  );
 }

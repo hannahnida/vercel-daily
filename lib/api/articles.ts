@@ -6,7 +6,7 @@ import handleApiError from '@/lib/api/handle-error';
 
 async function getAllArticlesForStaticParams() {
   try {
-    const res = await apiFetch<Article[]>("/articles");
+    const res = await apiFetch<Article[]>('/articles');
     return res.data;
   } catch (e) {
     handleApiError(e);
@@ -14,11 +14,11 @@ async function getAllArticlesForStaticParams() {
 }
 
 async function getAllArticles() {
-  "use cache";
-  cacheTag("articles");
-  cacheLife("hours");
+  'use cache';
+  cacheTag('articles');
+  cacheLife('hours');
   try {
-    const res = await apiFetch<Article[], PaginationMeta>("/articles");
+    const res = await apiFetch<Article[], PaginationMeta>('/articles');
     return res.data;
   } catch (e) {
     return handleApiError(e);
@@ -26,11 +26,11 @@ async function getAllArticles() {
 }
 
 async function getFeaturedArticles() {
-  "use cache";
-  cacheLife("articles");
+  'use cache';
+  cacheLife('articles');
   cacheTag('articles', 'articles:featured');
   try {
-    const res = await apiFetch<Article[], PaginationMeta>("/articles?featured=true&limit=6");
+    const res = await apiFetch<Article[], PaginationMeta>('/articles?featured=true&limit=6');
     return res.data;
   } catch (e) {
     return handleApiError(e);
@@ -38,9 +38,9 @@ async function getFeaturedArticles() {
 }
 
 async function getArticleBySlug(slug: string) {
-  "use cache";
+  'use cache';
   cacheTag(`article-${slug}`);
-  cacheLife("hours");
+  cacheLife('hours');
   try {
     const res = await apiFetch<Article>(`/articles/${slug}`);
     return res.data;
@@ -50,7 +50,7 @@ async function getArticleBySlug(slug: string) {
 }
 
 async function getTrendingArticles(ids: string[]) {
-  const articleIds = ids.join(",");
+  const articleIds = ids.join(',');
   try {
     const res = await apiFetch<Article[]>(`/articles/trending?exclude=${articleIds}`);
     return res.data;
@@ -77,11 +77,11 @@ async function searchArticles({q, page, category}: { q?: string; page?: number; 
   'use cache';
   cacheLife('articles');
   cacheTag('articles', `articles:search:${q}:${category}`);
-  const params = new URLSearchParams()
-  if (q) params.set('search', q)
-  if (category) params.set('category', category)
-  params.set('limit', '5')
-  params.set('page', String(page || 1))
+  const params = new URLSearchParams();
+  if (q) params.set('search', q);
+  if (category) params.set('category', category);
+  params.set('limit', '5');
+  params.set('page', String(page || 1));
   try {
     return await apiFetch<Article[], PaginationMeta>(`/articles?${params}`);
   } catch (e) {

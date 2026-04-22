@@ -1,5 +1,5 @@
-'use client'
-import { useEffect } from 'react'
+'use client';
+import { useEffect } from 'react';
 
 export default function Error({
   error,
@@ -10,8 +10,8 @@ export default function Error({
 }) {
 
   useEffect(() => {
-    console.error('Root error boundary caught:', error)
-  }, [error])
+    console.error('Root error boundary caught:', error);
+  }, [error]);
 
 
   return (
@@ -37,5 +37,5 @@ export default function Error({
         </button>
       </div>
     </div>
-  )
+  );
 }

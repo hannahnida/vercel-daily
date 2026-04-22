@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { ReactNode } from 'react';
 
 const INLINE_RE =
   /\[([^\]]+)\]\(([^\s)]+)\)|`([^`]+)`|\*\*(.+?)\*\*/g;
@@ -21,7 +21,7 @@ export default function InlineMarkdown({ text }: { text: string }) {
         <a
           key={match.index}
           href={linkHref}
-          {...(isExternal && { target: "_blank", rel: "noopener noreferrer" })}
+          {...(isExternal && { target: '_blank', rel: 'noopener noreferrer' })}
         >
           {linkText}
         </a>,

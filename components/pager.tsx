@@ -1,15 +1,15 @@
-import Link from 'next/link'
-import type { Pagination } from '@/lib/types/api'
+import Link from 'next/link';
+import type { Pagination } from '@/lib/types/api';
 
 export default function Pager({ pagination, q, category }: { pagination: Pagination; q?: string; category?: string }) {
-  const { page, totalPages, hasNextPage, hasPreviousPage } = pagination
+  const { page, totalPages, hasNextPage, hasPreviousPage } = pagination;
 
   function href(p: number) {
-    const params = new URLSearchParams()
-    if (q) params.set('q', q)
-    if (category) params.set('category', category)
-    if (p > 1) params.set('page', String(p))
-    return `/search${params.toString() ? `?${params}` : ''}`
+    const params = new URLSearchParams();
+    if (q) params.set('q', q);
+    if (category) params.set('category', category);
+    if (p > 1) params.set('page', String(p));
+    return `/search${params.toString() ? `?${params}` : ''}`;
   }
 
   return (
@@ -30,5 +30,5 @@ export default function Pager({ pagination, q, category }: { pagination: Paginat
         Next
       </Link>
     </nav>
-  )
+  );
 }

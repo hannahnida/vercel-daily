@@ -12,8 +12,8 @@ const SUBSCRIPTION_TOKEN_COOKIE = 'subscription_token';
 
 export async function createNewSubscription() {
   try {
-    const res = await apiFetch<SubscribeStatus>("/subscription/create", {
-      method: "POST",
+    const res = await apiFetch<SubscribeStatus>('/subscription/create', {
+      method: 'POST',
     });
 
     (await cookies()).set('subscription_token', res.data?.token, {
@@ -34,8 +34,8 @@ export async function activateSubscription() {
   if (!token) return null;
 
   try {
-    const res = await apiFetch<SubscribeStatus>("/subscription", {
-      method: "POST",
+    const res = await apiFetch<SubscribeStatus>('/subscription', {
+      method: 'POST',
       headers: {
         'x-subscription-token': token
       }
@@ -52,8 +52,8 @@ export async function deactivateSubscription() {
   if (!token) return null;
 
   try {
-    const res = await apiFetch<SubscribeStatus>("/subscription", {
-      method: "DELETE",
+    const res = await apiFetch<SubscribeStatus>('/subscription', {
+      method: 'DELETE',
       headers: {
         'x-subscription-token': token
       }

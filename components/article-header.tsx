@@ -1,11 +1,11 @@
-import type { Article } from "@/lib/types/articles";
-import Image from "next/image";
+import type { Article } from '@/lib/types/articles';
+import Image from 'next/image';
 
 export default function ArticleHeader({title, image, author, category, tags, publishedAt}: Article) {
-  const formattedDate = new Date(publishedAt).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
+  const formattedDate = new Date(publishedAt).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
   });
 
   return (

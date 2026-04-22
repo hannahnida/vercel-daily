@@ -7,14 +7,14 @@ export async function getSubscriptionStatus(){
   if (!token) return { isSubscribed: false, status: null };
 
   try {
-    const res = await apiFetch<SubscribeStatus>("/subscription", {
-      method: "GET",
+    const res = await apiFetch<SubscribeStatus>('/subscription', {
+      method: 'GET',
       headers: {
         'x-subscription-token': token
       }
     });
     return {
-      isSubscribed: res.data.status === "active",
+      isSubscribed: res.data.status === 'active',
       status: res.data.status,
     };
   } catch (e) {
