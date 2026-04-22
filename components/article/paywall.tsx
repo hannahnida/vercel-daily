@@ -8,7 +8,7 @@ type PaywallProps = {
 };
 
 export default async function Paywall({ children, preview, fallback }: PaywallProps) {
-  const { isSubscribed, status } = await getSubscriptionStatus();
+  const { isSubscribed } = await getSubscriptionStatus();
 
   if (isSubscribed) {
     return <>{children}</>;

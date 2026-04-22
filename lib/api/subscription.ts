@@ -17,7 +17,7 @@ export async function getSubscriptionStatus(){
       isSubscribed: res.data.status === 'active',
       status: res.data.status,
     };
-  } catch (e) {
+  } catch {
     // Subscription check should never crash the page.
     // Fail closed: treat any error as "not subscribed".
     return { isSubscribed: false, status: null };

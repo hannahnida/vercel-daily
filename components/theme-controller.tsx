@@ -4,15 +4,17 @@ import React, { useEffect, useState } from 'react';
 import { Sun, Moon } from 'lucide-react';
 
 const ThemeController: React.FC = () => {
-  const [isDark, setIsDark] = useState(false);
-
-  useEffect(() => {
+  const [isDark, setIsDark] = useState(() => {
+    if (typeof window === 'undefined') return false;
     const savedTheme = localStorage.getItem('theme');
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const initialDark = savedTheme === 'dark' || (!savedTheme && prefersDark);
-    setIsDark(initialDark);
-    document.documentElement.setAttribute('data-theme', initialDark ? 'dark' : 'light');
-  }, []);
+    return savedTheme === 'dark' || (!savedTheme && prefersDark);
+  });
+
+  // Sync the DOM attribute whenever isDark changes (external system update only)
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+  }, [isDark]);
 
   const toggleTheme = () => {
     const newIsDark = !isDark;

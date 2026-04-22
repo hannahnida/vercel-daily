@@ -1,20 +1,25 @@
 'use client';
 
-import { useEffect, useState, useTransition } from 'react';
+import { useCallback, useEffect, useState, useTransition } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function SearchInput() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [q, setQuery] = useState(searchParams.get('q') ?? '');
+  const searchParamQ = searchParams.get('q') ?? '';
+  const [q, setQuery] = useState(searchParamQ);
+  const [syncedParamQ, setSyncedParamQ] = useState(searchParamQ);
   const [isPending, startTransition] = useTransition();
 
-  // Sync local state when URL changes externally (back/forward, category click)
-  useEffect(() => {
-    setQuery(searchParams.get('q') ?? '');
-  }, [searchParams]);
+  // Sync local state when URL changes externally (back/forward, category click).
+  // Calling setState during render (not inside an effect) is the documented
+  // React pattern for deriving state from a changing external value.
+  if (syncedParamQ !== searchParamQ) {
+    setSyncedParamQ(searchParamQ);
+    setQuery(searchParamQ);
+  }
 
-  function updateUrl(nextQuery: string) {
+  const updateUrl = useCallback((nextQuery: string) => {
     const trimmed = nextQuery.trim();
     const params = new URLSearchParams(searchParams);
     if (trimmed) {
@@ -24,7 +29,7 @@ export default function SearchInput() {
     }
     params.delete('page');
     router.push(`/search${params.toString() ? `?${params}` : ''}`);
-  }
+  }, [router, searchParams]);
 
   useEffect(() => {
     const currentQuery = searchParams.get('q') ?? '';
@@ -35,7 +40,7 @@ export default function SearchInput() {
 
     const t = setTimeout(() => startTransition(() => updateUrl(q)), 500);
     return () => clearTimeout(t);
-  }, [q]);
+  }, [q, searchParams, updateUrl]);
 
   function onSubmit(e: React.FormEvent) {
     e.preventDefault();
