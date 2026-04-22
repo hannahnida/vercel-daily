@@ -9,15 +9,15 @@ export default function ArticleHeader({title, image, author, category, tags, pub
   });
 
   return (
-    <div className="mb-8">
+    <div className="mb-8 px-4">
       {image && (
-        <div className="relative w-full h-100 mb-6 overflow-hidden">
+        <div className="relative mb-6 aspect-4/3 lg:aspect-video overflow-hidden -z-10 -m-4">
           <Image
             src={image}
             alt={title}
             fill
             sizes="(max-width: 768px) 100vw, 768px"
-            className="object-contain object-center not-prose"
+            className="object-cover object-center not-prose"
             priority
           />
         </div>

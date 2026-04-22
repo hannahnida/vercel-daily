@@ -5,7 +5,7 @@ import { getSubscriptionStatus } from '@/lib/api/subscription';
 import SubscribeButton from '@/components/subscribe-button';
 
 async function HeroButtons() {
-  const subscriptionStatus = await getSubscriptionStatus();
+  const { status } = await getSubscriptionStatus();
 
   return (
     <div className="text-base-content/70 text-lg leading-relaxed flex gap-2">
@@ -13,7 +13,7 @@ async function HeroButtons() {
         Browse Articles
         <ArrowRightIcon className="h-4 w-4" />
       </Link>
-      <SubscribeButton status={subscriptionStatus} />
+      <SubscribeButton status={status} />
     </div>
   );
 }

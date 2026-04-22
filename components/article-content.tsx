@@ -26,7 +26,7 @@ function renderBlock(block: ContentBlock, i: number) {
 
 export default function ArticleContent({ content }: { content: ContentBlock[] }) {
   return (
-    <div>
+    <div className="px-4">
       {content.map(renderBlock)}
     </div>
   )

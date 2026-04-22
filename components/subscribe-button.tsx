@@ -17,23 +17,25 @@ export default function SubscribeButton({ status }: { status: SubscriptionStatus
     }
   };
 
-  return status === 'active'
-    ? (
-      <button
-        className="btn min-w-[120px]"
-        onClick={() => startTransition(async () => { await deactivateSubscription() })}
-        disabled={isPending}
-      >
-        {isPending ? 'Updating...' : 'Unsubscribe'}
-      </button>
-    )
-    : (
-      <button
-        className="btn min-w-[120px]"
-        onClick={handleSubscribe}
-        disabled={isPending}
-      >
-        {isPending ? 'Updating...' : 'Subscribe'}
-      </button>
-    );
+  return (
+    <div className='flex flex-col items-center gap-2'>
+      {status === 'active' ? (
+        <button
+          className='btn min-w-30'
+          onClick={handleSubscribe}
+          disabled={isPending}
+        >
+          {isPending ? 'Updating...' : 'Unsubscribe'}
+        </button>
+      ) : (
+        <button
+          className='btn btn-primary min-w-[120px]'
+          onClick={handleSubscribe}
+          disabled={isPending}
+        >
+          {isPending ? 'Updating...' : 'Subscribe'}
+        </button>
+      )}
+    </div>
+  );
 }
