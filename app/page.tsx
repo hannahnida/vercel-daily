@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import { articlesApi } from '@/lib/api/articles';
 import { getBreakingNewsWithSlug } from '@/lib/api/breaking-news';
@@ -5,6 +6,10 @@ import { BreakingNewsBanner } from '@/components/breaking-news-banner';
 import { FeaturedArticles } from '@/components/featured-articles';
 import Hero from '@/components/hero';
 import ArticleGridSkeleton from '@/components/article-grid-skeleton';
+
+export const metadata: Metadata = {
+  title: 'Vercel Daily — News and insights for modern web developers'
+};
 
 export default async function Home() {
   const breakingNewsPromise = getBreakingNewsWithSlug();

@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import { getCategories } from '@/lib/api/categories';
 import { articlesApi } from '@/lib/api/articles';
@@ -13,25 +14,37 @@ import {
 
 type SearchParams = Promise<{ q?: string; category?: string; page?: string }>;
 
+export const metadata: Metadata = {
+  title: 'Search',
+  description: 'Search articles across Vercel Daily.',
+  openGraph: {
+    title: 'Search',
+    description: 'Search articles across Vercel Daily.',
+  },
+  robots: { index: false, follow: true },
+};
+
 export default function SearchPage({ searchParams }: { searchParams: SearchParams }) {
   return (
-    <main className="mx-auto max-w-5xl xl:min-w-5xl px-4 py-10">
-      <h1 className="mb-6 text-3xl font-bold">Search</h1>
+    <div className="flex flex-col flex-1 items-center justify-center">
+      <main className="mx-auto max-w-5xl xl:min-w-5xl px-4 py-10">
+        <h1 className="mb-6 text-3xl font-bold">Search</h1>
 
-      <div className="space-y-4">
-        <Suspense fallback={<SearchInputSkeleton />}>
-          <SearchInput />
+        <div className="space-y-4">
+          <Suspense fallback={<SearchInputSkeleton />}>
+            <SearchInput />
+          </Suspense>
+
+          <Suspense fallback={<CategoryBadgesSkeleton />}>
+            <CategoryLoader searchParams={searchParams} />
+          </Suspense>
+        </div>
+
+        <Suspense fallback={<SearchResultsSkeleton />}>
+          <KeyedResults searchParams={searchParams} />
         </Suspense>
-
-        <Suspense fallback={<CategoryBadgesSkeleton />}>
-          <CategoryLoader searchParams={searchParams} />
-        </Suspense>
-      </div>
-
-      <Suspense fallback={<SearchResultsSkeleton />}>
-        <KeyedResults searchParams={searchParams} />
-      </Suspense>
-    </main>
+      </main>
+    </div>
   );
 }
 
