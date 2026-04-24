@@ -1,6 +1,9 @@
+import { headers } from 'next/headers';
+import { Suspense } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
+import SubscribeButton from '@/components/subscribe-button';
 import ThemeController from '@/components/header/theme-controller';
 import { DrawerNavLink } from '@/components/header/drawer-nav-link';
 
@@ -26,6 +29,15 @@ function MobileNav() {
       <li><DrawerNavLink drawerId={DRAWER_ID} className={linkClass} href="/search">Search</DrawerNavLink></li>
     </>
   );
+}
+
+async function SubscribeToggle() {
+  const headerStore = await headers()
+  const isSubscribed = headerStore.get('x-is-subscribed') === 'true'
+
+  return (
+    <SubscribeButton isSubscribed={isSubscribed} showIcon={true} />
+  )
 }
 
 export function Header() {
@@ -69,7 +81,12 @@ export function Header() {
           </ul>
         </div>
         <div className="navbar-end ml-auto flex-1 px-1 md:px-4">
-          <ThemeController />
+          <Suspense>
+            <SubscribeToggle />
+          </Suspense>
+          <div className="max-w-9.5">
+            <ThemeController />
+          </div>
         </div>
       </div>
     </header>

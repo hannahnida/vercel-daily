@@ -1,4 +1,4 @@
-import { getSubscriptionStatus } from '@/lib/api/subscription';
+import { headers } from "next/headers";
 import SubscribeButton from '@/components/subscribe-button';
 
 type PaywallProps = {
@@ -8,7 +8,8 @@ type PaywallProps = {
 };
 
 export default async function Paywall({ children, preview, fallback }: PaywallProps) {
-  const { isSubscribed } = await getSubscriptionStatus();
+  const headerStore = await headers()
+  const isSubscribed = headerStore.get('x-is-subscribed') === 'true'
 
   if (isSubscribed) {
     return <>{children}</>;
@@ -44,7 +45,7 @@ function DefaultUpsell() {
         breaking news, and exclusive deep-dives.
       </p>
       <div className='flex flex-col sm:flex-row items-center justify-center gap-3'>
-        <SubscribeButton status={null} />
+        <SubscribeButton isSubscribed={false} />
       </div>
     </aside>
   );

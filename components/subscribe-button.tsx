@@ -1,6 +1,8 @@
 'use client';
 
-import { useTransition } from 'react';
+import { useTransition, useOptimistic } from 'react';
+import { useRouter } from 'next/navigation';
+import { Bell, BellOff } from 'lucide-react';
 import {
   createNewSubscription,
   activateSubscription,
@@ -8,36 +10,32 @@ import {
 } from '@/lib/actions/subscription';
 import { useToast } from '@/components/toast-provider';
 
-type SubscriptionStatus = 'active' | 'inactive' | null;
-
 export default function SubscribeButton({
-  status,
+  isSubscribed,
+  showIcon = false,
 }: {
-  status: SubscriptionStatus;
+  isSubscribed: boolean;
+  showIcon?: boolean;
 }) {
   const [isPending, startTransition] = useTransition();
+  const [optimisticSubscribed, setOptimisticSubscribed] = useOptimistic(isSubscribed);
   const { addToast } = useToast();
+  const router = useRouter();
 
   const handleSubscribe = () => {
     startTransition(async () => {
       try {
-        if (status === 'active') {
-          await deactivateSubscription();
-          addToast('You have unsubscribed.', 'info');
-        } else if (status === null) {
-          // Try to activate an existing subscription first (token cookie may already exist).
-          // activateSubscription() returns null only when there is no token cookie at all,
-          // meaning this is a genuinely new user who needs a subscription created first.
-          const activated = await activateSubscription();
-          if (!activated) {
-            await createNewSubscription();
-            await activateSubscription();
-          }
-          addToast('You are now subscribed!', 'success');
-        } else {
+        if (!optimisticSubscribed) {
+          setOptimisticSubscribed(true);
+          await createNewSubscription();
           await activateSubscription();
           addToast('You are now subscribed!', 'success');
+        } else {
+          setOptimisticSubscribed(false);
+          await deactivateSubscription();
+          addToast('You have been unsubscribed.', 'success');
         }
+        router.refresh();
       } catch (e) {
         console.error('[SubscribeButton]', JSON.stringify(e, null, 2));
         addToast('Something went wrong. Please try again later.', 'error');
@@ -45,9 +43,30 @@ export default function SubscribeButton({
     });
   };
 
+  if (showIcon) {
+    return (
+      <div className="mr-2">
+        <button
+          className={`btn btn-square btn-sm ${optimisticSubscribed ? '' : ' btn-ghost'}`}
+          onClick={handleSubscribe}
+          disabled={isPending}
+          aria-label={optimisticSubscribed ? 'Unsubscribe' : 'Subscribe'}
+        >
+          {isPending ? (
+            <span className="loading loading-spinner loading-xs" />
+          ) : optimisticSubscribed ? (
+            <BellOff size={20} />
+          ) : (
+            <Bell size={20} />
+          )}
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col items-center gap-2">
-      {status === 'active' ? (
+      {optimisticSubscribed ? (
         <button
           className="btn min-w-30"
           onClick={handleSubscribe}
@@ -57,7 +76,7 @@ export default function SubscribeButton({
         </button>
       ) : (
         <button
-          className="btn btn-primary min-w-30"
+          className="btn btn-soft min-w-30"
           onClick={handleSubscribe}
           disabled={isPending}
         >

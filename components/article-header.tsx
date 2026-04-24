@@ -18,7 +18,7 @@ export default function ArticleHeader({title, image, author, category, tags, pub
             fill
             sizes="(max-width: 768px) 100vw, 768px"
             className="object-cover object-center not-prose"
-            priority
+            preload={true}
           />
         </div>
       )}

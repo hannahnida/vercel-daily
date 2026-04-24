@@ -41,7 +41,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     <ToastContext.Provider value={{ addToast }}>
       {children}
       {toasts.length > 0 && (
-        <div className='toast toast-end toast-bottom z-50'>
+        <div className='toast toast-end toast-top z-50'>
           {toasts.map((toast) => (
             <div key={toast.id} className={`alert ${ALERT_CLASS[toast.type]}`}>
               <span>{toast.message}</span>

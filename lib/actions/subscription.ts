@@ -1,6 +1,5 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 
 import { apiFetch } from '@/lib/api/client';
@@ -22,7 +21,6 @@ export async function createNewSubscription() {
       path: '/',
       secure: process.env.NODE_ENV === 'production'
     });
-    revalidatePath('/', 'layout');
     return res.data;
   } catch (e) {
     handleApiError(e);
@@ -40,7 +38,6 @@ export async function activateSubscription() {
         'x-subscription-token': token
       }
     });
-    revalidatePath('/', 'layout');
     return res.data;
   } catch (e) {
     handleApiError(e);
@@ -58,7 +55,6 @@ export async function deactivateSubscription() {
         'x-subscription-token': token
       }
     });
-    revalidatePath('/', 'layout');
     return res.data;
   } catch (e) {
     handleApiError(e);

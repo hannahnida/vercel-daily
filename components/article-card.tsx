@@ -28,6 +28,7 @@ export default function ArticleCard({ article, index }: ArticleCardProps) {
             fill
             sizes={'(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'}
             loading={index < 3 ? 'eager' : 'lazy'}
+            priority={index < 3}
             className="object-cover transition-opacity duration-300 group-hover:opacity-90"
           />
         ) : (

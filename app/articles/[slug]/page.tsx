@@ -40,7 +40,7 @@ export async function generateMetadata(
       title: article.title,
       description: article.excerpt,
       publishedTime: article.publishedAt,
-      authors: article.author?.name ? [article.author.name] : undefined,
+      authors: article.author.name,
       images: article.image ? [article.image] : undefined,
     },
   };
