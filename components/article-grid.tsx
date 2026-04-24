@@ -24,7 +24,7 @@ export default function ArticleGrid({ articles, title, columns = 3, className }:
   }
 
   return (
-    <section className={`w-full py-10 ${className ?? ''}`}>
+    <section className={`w-full px-4 py-10 ${className ?? ''}`}>
       {title && <h2 className="text-2xl font-bold mb-6">{title}</h2>}
       <div className={`grid ${colClasses[columns]} gap-6`}>
         {articles.map((article, index) => (
