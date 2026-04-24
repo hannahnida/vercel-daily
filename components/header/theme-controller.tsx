@@ -1,40 +1,48 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Sun, Moon } from 'lucide-react';
 
-const ThemeController: React.FC = () => {
-  const [isDark, setIsDark] = useState(() => {
-    if (typeof window === 'undefined') return false;
-    const savedTheme = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    return savedTheme === 'dark' || (!savedTheme && prefersDark);
-  });
+type Theme = 'silk' | 'dark';
 
-  // Sync the DOM attribute whenever isDark changes (external system update only)
+const THEME_STORAGE_KEY = 'theme';
+
+export default function ThemeController() {
+  const [theme, setTheme] = useState<Theme | null>(null);
+
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
-  }, [isDark]);
+    const current = document.documentElement.dataset.theme;
+    setTheme(current === 'dark' ? 'dark' : 'silk');
+  }, []);
 
-  const toggleTheme = () => {
-    const newIsDark = !isDark;
-    setIsDark(newIsDark);
-    document.documentElement.setAttribute('data-theme', newIsDark ? 'dark' : 'light');
-    localStorage.setItem('theme', newIsDark ? 'dark' : 'light');
+
+  if (theme === null) {
+    return <span className="inline-block w-12 h-6" aria-hidden="true" />;
+  }
+
+  const isDark = theme === 'dark';
+
+  const handleToggle = () => {
+    const next: Theme = isDark ? 'silk' : 'dark';
+    setTheme(next);
+    document.documentElement.dataset.theme = next;
+    try {
+      localStorage.setItem(THEME_STORAGE_KEY, next);
+    } catch {
+      // Storage disabled
+    }
   };
 
   return (
-    <label className="flex cursor-pointer gap-2 h-5">
-      <Sun size={18} className="self-center text-neutral dark:text-neutral-50" />
+    <label className="toggle text-base-content" aria-label="Toggle dark mode">
       <input
         type="checkbox"
         checked={isDark}
-        onChange={toggleTheme}
-        className="toggle theme-controller"
+        onChange={handleToggle}
+        className="theme-controller"
       />
-      <Moon size={18} className="self-center" />
+      <Sun size={16} aria-hidden="true" />
+      <Moon size={16} aria-hidden="true" />
     </label>
   );
-};
-
-export default ThemeController;
+}
