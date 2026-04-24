@@ -5,10 +5,10 @@ import { articlesApi } from '@/lib/api/articles';
 import ArticleGrid from '@/components/article-grid';
 import Pager from '@/components/pager';
 import SearchInput from '@/components/search-input';
-import CategoryBadges from '@/components/category-badges';
+import CategoryDropdown from '@/components/category-dropdown';
 import {
   SearchInputSkeleton,
-  CategoryBadgesSkeleton,
+  CategoryDropdownSkeleton,
   SearchResultsSkeleton,
 } from '@/components/search-skeletons';
 
@@ -35,7 +35,7 @@ export default function SearchPage({ searchParams }: { searchParams: SearchParam
             <SearchInput />
           </Suspense>
 
-          <Suspense fallback={<CategoryBadgesSkeleton />}>
+          <Suspense fallback={<CategoryDropdownSkeleton />}>
             <CategoryLoader searchParams={searchParams} />
           </Suspense>
         </div>
@@ -52,7 +52,7 @@ async function CategoryLoader({ searchParams }: { searchParams: SearchParams }) 
   const { category } = await searchParams;
   const categories = await getCategories();
   const selected = categories.find((c) => c.slug === category);
-  return <CategoryBadges categories={categories} initialCategory={selected} />;
+  return <CategoryDropdown categories={categories} initialCategory={selected} />;
 }
 
 async function KeyedResults({ searchParams }: { searchParams: SearchParams }) {

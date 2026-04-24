@@ -14,15 +14,12 @@ export function SearchInputSkeleton() {
   );
 }
 
-export function CategoryBadgesSkeleton({ hasSelected = false }: { hasSelected?: boolean }) {
+export function CategoryDropdownSkeleton() {
   return (
-    <div className="flex gap-2 flex-wrap">
-      {Array.from({ length: 5 }).map((_, i) => (
-        <div
-          key={i}
-          className={`badge ${i === 0 && hasSelected ? 'badge-primary min-w-30' : 'min-w-30'}`}
-        />
-      ))}
+    <div className="w-full sm:w-72">
+      <select disabled className="select select-bordered select-lg w-full animate-pulse" aria-label="Filter by category">
+        <option>All categories</option>
+      </select>
     </div>
   );
 }
