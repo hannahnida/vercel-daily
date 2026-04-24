@@ -21,7 +21,7 @@ export default function Pager({ pagination, q, category }: { pagination: Paginat
       >
         Previous
       </Link>
-      <span className="text-sm text-muted-foreground">Page {page} of {totalPages}</span>
+      <span className="text-sm text-base-content/60">Page {page} of {totalPages}</span>
       <Link
         href={href(page + 1)}
         aria-disabled={!hasNextPage}

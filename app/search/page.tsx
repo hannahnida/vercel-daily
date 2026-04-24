@@ -90,7 +90,7 @@ async function Results({ q, category, page }: { q: string; category: string; pag
 
   return (
     <section className="mt-8">
-      <h2 className="mb-4 text-sm font-medium text-muted-foreground">{heading}</h2>
+      <h2 className="mb-4 text-sm font-medium text-base-content/60">{heading}</h2>
       <ArticleGrid articles={articles} columns={3} />
       <Pager pagination={meta.pagination} q={q} category={category} />
     </section>

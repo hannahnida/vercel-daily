@@ -30,7 +30,7 @@ export function CategoryBadgesSkeleton({ hasSelected = false }: { hasSelected?: 
 export function SearchResultsSkeleton() {
   return (
     <section className="mt-8">
-      <h2 className="mb-4 text-sm font-medium text-muted-foreground">
+      <h2 className="mb-4 text-sm font-medium text-base-content/60">
         Loading results...
       </h2>
       <ArticleGridSkeleton count={5} columns={3} />

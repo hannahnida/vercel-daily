@@ -27,8 +27,8 @@ export default function ArticleGrid({ articles, title, columns = 3, className }:
     <section className={`w-full py-10 ${className ?? ''}`}>
       {title && <h2 className="text-2xl font-bold mb-6">{title}</h2>}
       <div className={`grid ${colClasses[columns]} gap-6`}>
-        {articles.map((article) => (
-          <ArticleCard key={article.id} article={article} />
+        {articles.map((article, index) => (
+          <ArticleCard key={article.id} article={article} index={index} />
         ))}
       </div>
     </section>

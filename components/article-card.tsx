@@ -4,9 +4,10 @@ import type { Article } from '@/lib/types/articles';
 
 type ArticleCardProps = {
   article: Article;
+  index: number;
 };
 
-export default function ArticleCard({ article }: ArticleCardProps) {
+export default function ArticleCard({ article, index }: ArticleCardProps) {
   const publishedDate = new Date(article.publishedAt).toLocaleDateString('en-US', {
     month: 'short',
     day: 'numeric',
@@ -26,6 +27,7 @@ export default function ArticleCard({ article }: ArticleCardProps) {
             alt={article.title}
             fill
             sizes={'(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'}
+            loading={index < 3 ? 'eager' : 'lazy'}
             className="object-cover transition-opacity duration-300 group-hover:opacity-90"
           />
         ) : (
