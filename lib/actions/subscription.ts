@@ -4,10 +4,9 @@ import { cookies } from 'next/headers';
 
 import { apiFetch } from '@/lib/api/client';
 import handleApiError from '@/lib/api/handle-error';
+import { SUBSCRIPTION_TOKEN_COOKIE } from '@/lib/constants';
 import type { SubscribeStatus } from '@/lib/types/subscribe-status';
 
-
-const SUBSCRIPTION_TOKEN_COOKIE = 'subscription_token';
 
 export async function createNewSubscription() {
   try {
@@ -15,11 +14,15 @@ export async function createNewSubscription() {
       method: 'POST',
     });
 
-    (await cookies()).set('subscription_token', res.data?.token, {
+    const expires = new Date();
+    expires.setMonth(expires.getMonth() + 1);
+
+    (await cookies()).set(SUBSCRIPTION_TOKEN_COOKIE, res.data?.token, {
       httpOnly: true,
       sameSite: 'lax',
       path: '/',
-      secure: process.env.NODE_ENV === 'production'
+      secure: process.env.NODE_ENV === 'production',
+      expires,
     });
     return res.data;
   } catch (e) {

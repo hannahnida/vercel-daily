@@ -1,9 +1,10 @@
 import { type NextRequest, NextResponse } from 'next/server';
+import { SUBSCRIPTION_TOKEN_COOKIE } from '@/lib/constants';
 import { getSubscriptionStatus } from '@/lib/api/subscription';
 
 export async function proxy(request: NextRequest) {
   console.log(`[Proxy] ${request.method} ${request.nextUrl.pathname}`);
-  const token = request.cookies.get('subscription_token')?.value;
+  const token = request.cookies.get(SUBSCRIPTION_TOKEN_COOKIE)?.value;
   const requestHeaders = new Headers(request.headers);
 
   if (token) {

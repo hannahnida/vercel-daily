@@ -50,6 +50,9 @@ async function getArticleBySlug(slug: string) {
 }
 
 async function getTrendingArticles(ids: string[]) {
+  'use cache';
+  cacheLife('trending');
+  cacheTag('articles', 'articles:trending');
   const articleIds = ids.join(',');
   try {
     const res = await apiFetch<Article[]>(`/articles/trending?exclude=${articleIds}`);

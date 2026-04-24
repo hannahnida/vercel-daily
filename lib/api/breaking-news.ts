@@ -6,7 +6,7 @@ import handleApiError from '@/lib/api/handle-error';
 
 export async function getBreakingNewsWithSlug() {
   'use cache';
-  cacheLife('minutes');
+  cacheLife('breakingNews');
   cacheTag('breaking-news');
 
   try {
