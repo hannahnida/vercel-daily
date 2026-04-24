@@ -23,19 +23,22 @@ export async function apiFetch<T, M = undefined>(
 
   if (!res.ok) {
     const contentType = res.headers.get('content-type') ?? '';
+    let apiError: ApiError;
+
     if (contentType.includes('application/json')) {
-      const error: ApiError = await res.json();
-      throw error;
+      apiError = await res.json();
+    } else {
+      const message = await res.text();
+      apiError = {
+        success: false,
+        error: {
+          code: 'BAD_REQUEST',
+          message: message || res.statusText,
+        },
+      };
     }
-    // Non-JSON error (e.g. plain-text 401 Unauthorized)
-    const message = await res.text();
-    throw {
-      success: false,
-      error: {
-        code: 'BAD_REQUEST',
-        message: message || res.statusText,
-      },
-    } satisfies ApiError;
+
+    throw new Error(apiError.error.message, { cause: apiError });
   }
 
   return await res.json() as ApiResponse<T, M>;

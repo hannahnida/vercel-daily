@@ -1,18 +1,17 @@
 'use client';
+
 import { useEffect } from 'react';
 
 export default function Error({
   error,
   reset,
 }: {
-  error: Error & { digest?: string }
-  reset: () => void
+  error: Error & { digest?: string };
+  reset: () => void;
 }) {
-
   useEffect(() => {
-    console.error('Root error boundary caught:', error);
+    console.error('Error boundary caught:', error);
   }, [error]);
-
 
   return (
     <div className="flex min-h-[50vh] flex-col items-center justify-center">
