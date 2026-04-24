@@ -1,4 +1,4 @@
-import { headers } from "next/headers";
+import { headers } from 'next/headers';
 import { Suspense } from 'react';
 import Link from 'next/link';
 import { ArrowRightIcon } from 'lucide-react';

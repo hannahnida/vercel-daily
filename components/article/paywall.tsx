@@ -1,4 +1,4 @@
-import { headers } from "next/headers";
+import { headers } from 'next/headers';
 import SubscribeButton from '@/components/subscribe-button';
 
 type PaywallProps = {
@@ -8,8 +8,8 @@ type PaywallProps = {
 };
 
 export default async function Paywall({ children, preview, fallback }: PaywallProps) {
-  const headerStore = await headers()
-  const isSubscribed = headerStore.get('x-is-subscribed') === 'true'
+  const headerStore = await headers();
+  const isSubscribed = headerStore.get('x-is-subscribed') === 'true';
 
   if (isSubscribed) {
     return <>{children}</>;

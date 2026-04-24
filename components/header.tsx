@@ -32,12 +32,12 @@ function MobileNav() {
 }
 
 async function SubscribeToggle() {
-  const headerStore = await headers()
-  const isSubscribed = headerStore.get('x-is-subscribed') === 'true'
+  const headerStore = await headers();
+  const isSubscribed = headerStore.get('x-is-subscribed') === 'true';
 
   return (
     <SubscribeButton isSubscribed={isSubscribed} showIcon={true} />
-  )
+  );
 }
 
 export function Header() {

@@ -1,23 +1,23 @@
-import { type NextRequest, NextResponse } from 'next/server'
-import { getSubscriptionStatus } from "@/lib/api/subscription";
+import { type NextRequest, NextResponse } from 'next/server';
+import { getSubscriptionStatus } from '@/lib/api/subscription';
 
 export async function proxy(request: NextRequest) {
-  console.log(`[Proxy] ${request.method} ${request.nextUrl.pathname}`)
-  const token = request.cookies.get('subscription_token')?.value
-  const requestHeaders = new Headers(request.headers)
+  console.log(`[Proxy] ${request.method} ${request.nextUrl.pathname}`);
+  const token = request.cookies.get('subscription_token')?.value;
+  const requestHeaders = new Headers(request.headers);
 
   if (token) {
     try {
       const { isSubscribed } = await getSubscriptionStatus();
       requestHeaders.set('x-is-subscribed', isSubscribed ? 'true' : 'false');
     } catch {
-      requestHeaders.set('x-is-subscribed', 'false')
+      requestHeaders.set('x-is-subscribed', 'false');
     }
   } else {
-    requestHeaders.set('x-is-subscribed', 'false')
+    requestHeaders.set('x-is-subscribed', 'false');
   }
 
-  return NextResponse.next({ request: { headers: requestHeaders } })
+  return NextResponse.next({ request: { headers: requestHeaders } });
 }
 
 // Configure which paths run the proxy
@@ -31,4 +31,4 @@ export const config = {
      */
     '/((?!_next/static|_next/image|favicon.ico).*)',
   ],
-}
+};
