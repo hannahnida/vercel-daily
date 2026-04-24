@@ -58,7 +58,7 @@ export default function SearchInput() {
         placeholder="Search articles…"
         className="input input-lg w-full md:w-auto min-h-12 md:min-h-auto input-bordered flex-1 lg:flex-5 focus:outline-none"
       />
-      <button type="submit" className="btn btn-lg btn-soft flex-1" disabled={isPending}>
+      <button type="submit" className="btn btn-lg min-h-12 md:min-h-auto btn-soft dark:btn-primary flex-1" disabled={isPending}>
         {isPending ? <span className="loading loading-spinner loading-sm" /> : 'Search'}
       </button>
     </form>
