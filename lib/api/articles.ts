@@ -16,7 +16,7 @@ async function getAllArticlesForStaticParams() {
 async function getAllArticles() {
   'use cache';
   cacheTag('articles');
-  cacheLife('hours');
+  cacheLife('articles');
   try {
     const res = await apiFetch<Article[], PaginationMeta>('/articles');
     return res.data;
@@ -40,7 +40,7 @@ async function getFeaturedArticles() {
 async function getArticleBySlug(slug: string) {
   'use cache';
   cacheTag(`article-${slug}`);
-  cacheLife('hours');
+  cacheLife('articles');
   try {
     const res = await apiFetch<Article>(`/articles/${slug}`);
     return res.data;
@@ -78,7 +78,7 @@ async function getRecent({ page }: { page: number }) {
 
 async function searchArticles({q, page, category}: { q?: string; page?: number; category?: string }) {
   'use cache';
-  cacheLife('articles');
+  cacheLife({ stale: 300, revalidate: 3600, expire: 86400 });
   cacheTag('articles', `articles:search:${q}:${category}`);
   const params = new URLSearchParams();
   if (q) params.set('search', q);
