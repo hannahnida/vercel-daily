@@ -7,7 +7,7 @@ const nextConfig: NextConfig = {
     breakingNews: { stale: 30,   revalidate: 60,    expire: 300    },
     articles:     { stale: 3600, revalidate: 86400, expire: 604800 },
     trending:     { stale: 300,  revalidate: 900,   expire: 3600   },
-    search:       { stale: 300,  revalidate: 3600,  expire: 86400  },
+    search:       { stale: 900,  revalidate: 3600,  expire: 86400  },
     categories:   { stale: 3600, revalidate: 86400, expire: 604800 },
   },
   images: {

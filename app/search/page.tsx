@@ -41,7 +41,7 @@ export default function SearchPage({ searchParams }: { searchParams: SearchParam
         </div>
 
         <Suspense fallback={<SearchResultsSkeleton />}>
-          <KeyedResults searchParams={searchParams} />
+          <Results searchParams={searchParams} />
         </Suspense>
       </main>
     </div>
@@ -55,22 +55,12 @@ async function CategoryLoader({ searchParams }: { searchParams: SearchParams }) 
   return <CategoryDropdown categories={categories} initialCategory={selected} />;
 }
 
-async function KeyedResults({ searchParams }: { searchParams: SearchParams }) {
+async function Results({ searchParams }: { searchParams: SearchParams }) {
   const { q = '', category = '', page = '' } = await searchParams;
-  const resultsKey = `${q}-${category}-${page}`;
-
-  return (
-    <Suspense key={resultsKey} fallback={<SearchResultsSkeleton />}>
-      <Results q={q} category={category} page={Number(page) || 1} />
-    </Suspense>
-  );
-}
-
-async function Results({ q, category, page }: { q: string; category: string; page: number }) {
   const result =
     q || category
-      ? await articlesApi.search({ q, category, page })
-      : await articlesApi.getRecent({ page });
+      ? await articlesApi.search({ q, category, page: (Number(page) || 1) })
+      : await articlesApi.getRecent({ page: (Number(page) || 1) });
 
   if (!result || result.data.length === 0) {
     return (
