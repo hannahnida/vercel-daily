@@ -8,6 +8,7 @@ const nextConfig: NextConfig = {
     articles:     { stale: 3600, revalidate: 86400, expire: 604800 },
     trending:     { stale: 300,  revalidate: 900,   expire: 3600   },
     search:       { stale: 300,  revalidate: 3600,  expire: 86400  },
+    categories:   { stale: 3600, revalidate: 86400, expire: 604800 },
   },
   images: {
     remotePatterns: [new URL('https://i8qy5y6gxkdgdcv9.public.blob.vercel-storage.com/news/**')],

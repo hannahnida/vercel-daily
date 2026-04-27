@@ -78,7 +78,7 @@ async function getRecent({ page }: { page: number }) {
 
 async function searchArticles({q, page, category}: { q?: string; page?: number; category?: string }) {
   'use cache';
-  cacheLife({ stale: 300, revalidate: 3600, expire: 86400 });
+  cacheLife('search');
   cacheTag('articles', `articles:search:${q}:${category}`);
   const params = new URLSearchParams();
   if (q) params.set('search', q);

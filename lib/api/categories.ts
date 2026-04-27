@@ -4,7 +4,7 @@ import { cacheLife, cacheTag } from 'next/cache';
 
 export async function getCategories() {
   'use cache';
-  cacheLife('days');
+  cacheLife('categories');
   cacheTag('categories');
   try {
     const res = await apiFetch<Category[]>('/categories');
